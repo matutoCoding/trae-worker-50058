@@ -7,7 +7,9 @@ export default defineAppConfig({
     'pages/mine/index',
     'pages/safety/index',
     'pages/equipment/index',
-    'pages/help/index'
+    'pages/help/index',
+    'pages/harvest-add/index',
+    'pages/route-detail/index'
   ],
   window: {
     backgroundTextStyle: 'light',

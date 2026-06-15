@@ -91,19 +91,25 @@ export const emergencyContacts: EmergencyContact[] = [
     id: 'c1',
     name: '张大海',
     phone: '13800138001',
-    relation: '父亲'
+    relation: '配偶',
+    isPrimary: true,
+    distance: '3.2公里'
   },
   {
     id: 'c2',
     name: '李小明',
     phone: '13900139002',
-    relation: '朋友'
+    relation: '朋友',
+    isPrimary: false,
+    distance: '5.8公里'
   },
   {
     id: 'c3',
     name: '王队长',
     phone: '13700137003',
-    relation: '救援队'
+    relation: '救援队',
+    isPrimary: false,
+    distance: '1.5公里'
   }
 ];
 

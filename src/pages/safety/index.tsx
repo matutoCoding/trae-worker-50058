@@ -32,8 +32,11 @@ const SafetyPage: React.FC = () => {
     );
   };
 
-  const handleNav = (routeName: string) => {
-    Taro.showToast({ title: `导航至: ${routeName}`, icon: 'none' });
+  const handleNav = (routeId: string) => {
+    Taro.navigateTo({
+      url: `/pages/route-detail/index?routeId=${routeId}&beachId=${selectedBeachId}`,
+      fail: (err) => console.error('[SafetyPage] 跳转失败:', err)
+    });
   };
 
   const handleEmergency = () => {
@@ -115,8 +118,8 @@ const SafetyPage: React.FC = () => {
                   </View>
                   <Text className={styles.routeDesc}>{route.description}</Text>
                 </View>
-                <View className={styles.routeNavBtn} onClick={() => handleNav(route.name)}>
-                  导航
+                <View className={styles.routeNavBtn} onClick={() => handleNav(route.id)}>
+                  导航 ›
                 </View>
               </View>
             ))}

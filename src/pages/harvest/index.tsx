@@ -1,11 +1,59 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
-import { harvestRecords, harvestStats } from '@/data/harvest';
+import { HarvestRecord } from '@/types';
+import { getHarvestRecords } from '@/utils/storage';
 
 const HarvestPage: React.FC = () => {
-  const records = harvestRecords;
+  const [records, setRecords] = useState<HarvestRecord[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const loadRecords = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getHarvestRecords();
+      setRecords(data);
+    } catch (e) {
+      console.error('[HarvestPage] loadRecords error:', e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useDidShow(() => {
+    loadRecords();
+  });
+
+  useEffect(() => {
+    loadRecords();
+  }, [loadRecords]);
+
+  const computedStats = useMemo(() => {
+    const totalTrips = records.length;
+    const speciesSet = new Set<string>();
+    let totalWeight = 0;
+    let bestCatch = '暂无';
+    let maxWeight = 0;
+
+    records.forEach(r => {
+      r.species.forEach(s => {
+        speciesSet.add(s.name);
+        totalWeight += s.weight;
+        if (s.weight > maxWeight) {
+          maxWeight = s.weight;
+          bestCatch = `${s.name} ${s.count}只 / ${s.weight.toFixed(1)}kg`;
+        }
+      });
+    });
+
+    return {
+      totalTrips,
+      totalSpecies: speciesSet.size,
+      totalWeight: totalWeight.toFixed(1),
+      bestCatch
+    };
+  }, [records]);
 
   const getTotalCount = (species: { count: number }[]) => {
     return species.reduce((sum, s) => sum + s.count, 0);
@@ -16,7 +64,10 @@ const HarvestPage: React.FC = () => {
   };
 
   const handleAddRecord = () => {
-    Taro.showToast({ title: '功能开发中...', icon: 'none' });
+    Taro.navigateTo({
+      url: '/pages/harvest-add/index',
+      fail: (err) => console.error('[HarvestPage] 跳转失败:', err);
+    });
   };
 
   const handleRecordClick = (id: string) => {
@@ -31,28 +82,28 @@ const HarvestPage: React.FC = () => {
         <View className={styles.statsGrid}>
           <View className={styles.statItem}>
             <View>
-              <Text className={styles.statValue}>{harvestStats.totalTrips}</Text>
+              <Text className={styles.statValue}>{computedStats.totalTrips}</Text>
               <Text className={styles.statUnit}>次</Text>
             </View>
             <Text className={styles.statLabel}>累计赶海</Text>
           </View>
           <View className={styles.statItem}>
             <View>
-              <Text className={styles.statValue}>{harvestStats.totalSpecies}</Text>
+              <Text className={styles.statValue}>{computedStats.totalSpecies}</Text>
               <Text className={styles.statUnit}>种</Text>
             </View>
             <Text className={styles.statLabel}>捕获物种</Text>
           </View>
           <View className={styles.statItem}>
             <View>
-              <Text className={styles.statValue}>{harvestStats.totalWeight}</Text>
+              <Text className={styles.statValue}>{computedStats.totalWeight}</Text>
               <Text className={styles.statUnit}>kg</Text>
             </View>
             <Text className={styles.statLabel}>总收获量</Text>
           </View>
           <View className={styles.statItem}>
             <Text className={styles.statValue} style={{ fontSize: '28rpx', lineHeight: 1.3 }}>
-              {harvestStats.bestCatch}
+              {computedStats.bestCatch}
             </Text>
             <Text className={styles.statLabel}>最佳战绩</Text>
           </View>
@@ -71,7 +122,12 @@ const HarvestPage: React.FC = () => {
           <Text className={styles.sectionTitle}>📝 赶海日志</Text>
           <Text className={styles.sectionCount}>{records.length}条记录</Text>
         </View>
-        {records.length === 0 ? (
+        {loading ? (
+          <View className={styles.emptyState}>
+            <Text className={styles.emptyIcon}>⏳</Text>
+            <Text className={styles.emptyTitle}>加载中...</Text>
+          </View>
+        ) : records.length === 0 ? (
           <View className={styles.emptyState}>
             <Text className={styles.emptyIcon}>🐚</Text>
             <Text className={styles.emptyTitle}>暂无赶海记录</Text>
@@ -80,7 +136,7 @@ const HarvestPage: React.FC = () => {
         ) : (
           <View className={styles.recordList}>
             {records.map((record) => (
-              <View
+            <View
                 className={styles.recordCard}
                 key={record.id}
                 onClick={() => handleRecordClick(record.id)}
@@ -91,7 +147,7 @@ const HarvestPage: React.FC = () => {
                     <Text className={styles.recordBeach}>🏖️ {record.beachName}</Text>
                   </View>
                   <View className={styles.recordMeta}>
-                    <Text className={styles.metaTag}>☀️ {record.weather}</Text>
+                    <Text className={styles.metaTag}>☀️ {record.weather || '晴'}</Text>
                     <Text className={styles.metaTag}>⏱️ {record.duration}小时</Text>
                   </View>
                 </View>
@@ -117,9 +173,11 @@ const HarvestPage: React.FC = () => {
                     </View>
                   ))}
                 </View>
-                <View className={styles.recordNotes}>
-                  <Text>{record.notes}</Text>
-                </View>
+                {record.notes && (
+                  <View className={styles.recordNotes}>
+                    <Text>{record.notes}</Text>
+                  </View>
+                )}
                 <View className={styles.recordFooter}>
                   <Text className={styles.recordTime}>创建于 {record.createdAt}</Text>
                   <View className={styles.recordActions}>

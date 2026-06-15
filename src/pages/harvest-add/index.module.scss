@@ -1,0 +1,262 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding: $spacing-lg;
+  padding-bottom: 140rpx;
+  background: $color-bg-page;
+}
+
+.formCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.formTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md 0;
+  border-bottom: 2rpx solid $color-border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.formLabel {
+  width: 140rpx;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.formValue {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  text-align: right;
+
+  &.placeholder {
+    color: $color-text-tertiary;
+  }
+}
+
+.formArrow {
+  margin-left: $spacing-sm;
+  color: $color-text-tertiary;
+  font-size: $font-size-md;
+}
+
+.speciesList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.speciesItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.speciesName {
+  flex: 1;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.speciesCount {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-right: $spacing-md;
+}
+
+.countBtn {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: $color-bg-card;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-lg;
+  color: $color-primary;
+  border: 2rpx solid rgba(0, 119, 182, 0.2);
+  font-weight: $font-weight-bold;
+}
+
+.countNum {
+  min-width: 56rpx;
+  text-align: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.weightInput {
+  width: 120rpx;
+  text-align: right;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  border-bottom: 2rpx solid $color-border;
+  padding-bottom: 4rpx;
+}
+
+.addSpeciesBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-md;
+  border: 2rpx dashed $color-border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  gap: 6rpx;
+}
+
+.textareaWrap {
+  width: 100%;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 160rpx;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.6;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  box-sizing: border-box;
+}
+
+.bottomBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.cancelBtn {
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  background: $color-bg-hover;
+}
+
+.submitBtn {
+  flex: 2;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 6rpx 20rpx rgba(0, 119, 182, 0.3);
+}
+
+.speciesPickerItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  border-bottom: 2rpx solid $color-border-light;
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.speciesPickerName {
+  flex: 1;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.speciesPickerIcon {
+  font-size: 32rpx;
+  margin-right: $spacing-sm;
+}
+
+.weatherTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.weatherTag {
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  background: $color-bg-hover;
+  color: $color-text-secondary;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+}
+
+.weatherTagActive {
+  background: rgba(0, 119, 182, 0.1);
+  color: $color-primary;
+  border-color: rgba(0, 119, 182, 0.3);
+  font-weight: $font-weight-semibold;
+}
+
+.durationInput {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.durationNum {
+  width: 80rpx;
+  text-align: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  border-bottom: 2rpx solid $color-border;
+  padding-bottom: 4rpx;
+}
+
+.durationUnit {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.emptyHint {
+  text-align: center;
+  padding: $spacing-xl 0;
+  color: $color-text-tertiary;
+  font-size: $font-size-sm;
+}

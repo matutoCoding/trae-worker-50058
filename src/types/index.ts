@@ -89,6 +89,8 @@ export interface EmergencyContact {
   name: string;
   phone: string;
   relation: string;
+  isPrimary?: boolean;
+  distance?: string;
 }
 
 // 潮汐日历类型
