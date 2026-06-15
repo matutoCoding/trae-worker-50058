@@ -181,7 +181,7 @@ export function getCatchWindow(tideData: TideData) {
   };
 }
 
-// 计算涨潮撤离倒计时（基于下次高潮时间 - 安全时间）
+// 计算涨潮撤离倒计时（基于下次高潮时间 - 安全时间），支持跨天
 export function getEvacuationCountdown(tideData: TideData) {
   if (!tideData || !tideData.records || tideData.records.length === 0) {
     return null;
@@ -190,7 +190,7 @@ export function getEvacuationCountdown(tideData: TideData) {
   const now = dayjs();
   const currentMinutes = now.hour() * 60 + now.minute();
 
-  // 找到下一个高潮
+  // 找到所有高潮
   const highTides = tideData.records
     .filter(r => r.type === 'high')
     .map(r => {
@@ -201,10 +201,11 @@ export function getEvacuationCountdown(tideData: TideData) {
 
   if (highTides.length === 0) return null;
 
-  // 安全撤离时间 = 高潮时间 - 60分钟（建议涨潮前1小时开始撤离）
   const SAFETY_BUFFER_MINUTES = 60;
 
+  // 先找今天的下次高潮
   let nextHigh = null;
+  let isNextDay = false;
   for (const high of highTides) {
     const evacuateTime = high.minutes - SAFETY_BUFFER_MINUTES;
     if (evacuateTime > currentMinutes) {
@@ -213,28 +214,33 @@ export function getEvacuationCountdown(tideData: TideData) {
     }
   }
 
-  // 如果今天的高潮都过了
+  // 如果今天的都过了，用明天的第一个高潮
   if (!nextHigh) {
-    return {
-      hours: 0,
-      minutes: 0,
-      totalMinutes: 0,
-      urgent: false,
-      status: 'ended',
-      nextHighTide: null,
-      message: '今日涨潮已结束'
+    const firstHigh = highTides[0];
+    nextHigh = {
+      ...firstHigh,
+      minutes: firstHigh.minutes + 24 * 60,
+      evacuateTime: firstHigh.minutes + 24 * 60 - SAFETY_BUFFER_MINUTES
     };
+    isNextDay = true;
   }
 
   const diffMinutes = nextHigh.evacuateTime - currentMinutes;
   const hours = Math.floor(diffMinutes / 60);
   const minutes = diffMinutes % 60;
 
-  // 判断紧急程度
   let urgency = 'safe';
   if (diffMinutes <= 30) urgency = 'critical';
   else if (diffMinutes <= 60) urgency = 'warning';
   else if (diffMinutes <= 120) urgency = 'notice';
+
+  const highTimeDisplay = isNextDay
+    ? `明日 ${formatTime(nextHigh.minutes % (24 * 60))}`
+    : formatTime(nextHigh.minutes);
+
+  const evacTimeDisplay = isNextDay
+    ? `明日 ${formatTime(nextHigh.evacuateTime % (24 * 60))}`
+    : formatTime(nextHigh.evacuateTime);
 
   return {
     hours,
@@ -244,13 +250,13 @@ export function getEvacuationCountdown(tideData: TideData) {
     urgency,
     status: 'countdown',
     nextHighTide: {
-      time: nextHigh.time,
-      height: nextHigh.height
+      time: highTimeDisplay,
+      height: nextHigh.height,
+      isNextDay
     },
     safetyBuffer: SAFETY_BUFFER_MINUTES,
-    message: diffMinutes <= 0
-      ? '已到撤离时间！请立即撤离！'
-      : `建议在 ${formatTime(nextHigh.evacuateTime)} 前开始撤离`
+    isNextDay,
+    message: `建议在 ${evacTimeDisplay} 前开始撤离（${isNextDay ? '明天' : '今天'} ${highTimeDisplay} 高潮）`
   };
 }
 

@@ -98,6 +98,198 @@
   margin-bottom: $spacing-md;
 }
 
+.planCard {
+  background: linear-gradient(135deg, rgba(0, 119, 182, 0.06) 0%, rgba(0, 180, 216, 0.06) 100%);
+  border: 2rpx solid rgba(0, 119, 182, 0.15);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.planHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.planTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.planSaveBtn {
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+}
+
+.planSection {
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.planLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.planEmpty {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+  padding: $spacing-md 0;
+}
+
+.routeSelectList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.routeSelectItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+}
+
+.routeSelectItemActive {
+  border-color: $color-primary;
+  background: rgba(0, 119, 182, 0.06);
+}
+
+.routeSelectCheck {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 3rpx solid $color-border;
+  margin-right: $spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: $color-text-white;
+  flex-shrink: 0;
+
+  .routeSelectItemActive & {
+    background: $color-primary;
+    border-color: $color-primary;
+  }
+}
+
+.routeSelectInfo {
+  flex: 1;
+}
+
+.routeSelectName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.routeSelectMeta {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.routeSelectNav {
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, $color-success 0%, #36CFC9 100%);
+  color: $color-text-white;
+  border-radius: $radius-round;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  flex-shrink: 0;
+}
+
+.planInputWrap {
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+}
+
+.planInput {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+}
+
+.peopleSelector {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.peopleBtn {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background: $color-bg-card;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-lg;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+  border: 2rpx solid rgba(0, 119, 182, 0.2);
+}
+
+.peopleNum {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.peopleUnit {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-left: $spacing-sm;
+}
+
+.planSummary {
+  margin-top: $spacing-md;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  border-left: 4rpx solid $color-primary;
+}
+
+.planSummaryTitle {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.planSummaryText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: 1.8;
+}
+
 .cardTitle {
   font-size: $font-size-lg;
   font-weight: $font-weight-semibold;

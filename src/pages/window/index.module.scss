@@ -117,6 +117,77 @@
   box-shadow: 0 8rpx 32rpx rgba(0, 180, 42, 0.25);
 }
 
+.reminderCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.reminderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.reminderTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.reminderSubtitle {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
+.reminderList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.reminderItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.reminderInfo {
+  flex: 1;
+}
+
+.reminderLabel {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.reminderTime {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.reminderTip {
+  margin-top: $spacing-md;
+  padding: $spacing-sm $spacing-md;
+  background: rgba(0, 119, 182, 0.06);
+  border-radius: $radius-sm;
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  line-height: 1.5;
+}
+
 .windowProgressCard {
   background: $color-bg-card;
   border-radius: $radius-lg;

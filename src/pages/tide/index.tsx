@@ -132,19 +132,45 @@ const TidePage: React.FC = () => {
     );
   }
 
-  const nextHighTide = currentTide.records.find(r => {
-    const [h, m] = r.time.split(':').map(Number);
-    const recMin = h * 60 + m;
+  const nextHighTide = useMemo(() => {
     const nowMin = nowTime.hour() * 60 + nowTime.minute();
-    return r.type === 'high' && recMin > nowMin;
-  });
+    const highs = currentTide.records
+      .filter(r => r.type === 'high')
+      .map(r => {
+        const [h, m] = r.time.split(':').map(Number);
+        return { ...r, minutes: h * 60 + m };
+      })
+      .sort((a, b) => a.minutes - b.minutes);
+    const found = highs.find(r => r.minutes > nowMin);
+    if (found) {
+      return { ...found, isNextDay: false, displayTime: found.time };
+    }
+    if (highs.length > 0) {
+      const first = highs[0];
+      return { ...first, isNextDay: true, displayTime: `明日 ${first.time}` };
+    }
+    return null;
+  }, [currentTide, nowTime]);
 
-  const nextLowTide = currentTide.records.find(r => {
-    const [h, m] = r.time.split(':').map(Number);
-    const recMin = h * 60 + m;
+  const nextLowTide = useMemo(() => {
     const nowMin = nowTime.hour() * 60 + nowTime.minute();
-    return r.type === 'low' && recMin > nowMin;
-  });
+    const lows = currentTide.records
+      .filter(r => r.type === 'low')
+      .map(r => {
+        const [h, m] = r.time.split(':').map(Number);
+        return { ...r, minutes: h * 60 + m };
+      })
+      .sort((a, b) => a.minutes - b.minutes);
+    const found = lows.find(r => r.minutes > nowMin);
+    if (found) {
+      return { ...found, isNextDay: false, displayTime: found.time };
+    }
+    if (lows.length > 0) {
+      const first = lows[0];
+      return { ...first, isNextDay: true, displayTime: `明日 ${first.time}` };
+    }
+    return null;
+  }, [currentTide, nowTime]);
 
   return (
     <ScrollView scrollY className={styles.container}>
@@ -194,13 +220,13 @@ const TidePage: React.FC = () => {
           <View className={styles.overviewItem}>
             <Text className={styles.itemLabel}>下次高潮</Text>
             <Text className={styles.itemValue}>
-              {nextHighTide?.time || '明日'}
+              {nextHighTide?.displayTime || '--'}
             </Text>
           </View>
           <View className={styles.overviewItem}>
             <Text className={styles.itemLabel}>下次低潮</Text>
             <Text className={styles.itemValue}>
-              {nextLowTide?.time || '明日'}
+              {nextLowTide?.displayTime || '--'}
             </Text>
           </View>
         </View>

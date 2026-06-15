@@ -9,6 +9,7 @@ export default defineAppConfig({
     'pages/equipment/index',
     'pages/help/index',
     'pages/harvest-add/index',
+    'pages/harvest-detail/index',
     'pages/route-detail/index'
   ],
   window: {

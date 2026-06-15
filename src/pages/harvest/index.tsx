@@ -71,7 +71,10 @@ const HarvestPage: React.FC = () => {
   };
 
   const handleRecordClick = (id: string) => {
-    Taro.showToast({ title: `查看记录 #${id}`, icon: 'none' });
+    Taro.navigateTo({
+      url: `/pages/harvest-detail/index?id=${id}`,
+      fail: (err) => console.error('[HarvestPage] 跳转详情失败:', err)
+    });
   };
 
   return (

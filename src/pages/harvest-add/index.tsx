@@ -1,22 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Textarea, Input } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow, useRouter } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import { beaches } from '@/data/beach';
 import { commonSpecies } from '@/data/harvest';
 import { HarvestRecord, HarvestSpecies } from '@/types';
-import { saveHarvestRecord, generateId, formatDate, formatDateTime } from '@/utils/storage';
+import {
+  saveHarvestRecord,
+  updateHarvestRecord,
+  getHarvestRecordById,
+  generateId,
+  formatDate,
+  formatDateTime
+} from '@/utils/storage';
 
 const weatherOptions = ['晴', '多云', '阴', '小雨', '阵雨', '晴转多云'];
 
 const HarvestAddPage: React.FC = () => {
+  const router = useRouter();
+  const recordId = router.params?.id;
+  const isEdit = !!recordId;
+
   const [selectedBeachId, setSelectedBeachId] = useState<string>('');
   const [speciesList, setSpeciesList] = useState<HarvestSpecies[]>([]);
   const [weather, setWeather] = useState<string>('晴');
   const [duration, setDuration] = useState<string>('3');
   const [notes, setNotes] = useState<string>('');
   const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [originalCreatedAt, setOriginalCreatedAt] = useState<string>('');
+
+  useEffect(() => {
+    if (isEdit && recordId) {
+      loadRecord(recordId);
+    }
+  }, [isEdit, recordId]);
+
+  const loadRecord = async (id: string) => {
+    setLoading(true);
+    try {
+      const record = await getHarvestRecordById(id);
+      if (record) {
+        setSelectedBeachId(record.beachId);
+        setSpeciesList(record.species);
+        setWeather(record.weather);
+        setDuration(String(record.duration));
+        setNotes(record.notes);
+        setOriginalCreatedAt(record.createdAt);
+      } else {
+        Taro.showToast({ title: '记录不存在', icon: 'none' });
+        setTimeout(() => Taro.navigateBack(), 1000);
+      }
+    } catch (e) {
+      console.error('[HarvestAdd] loadRecord error:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const selectedBeach = beaches.find(b => b.id === selectedBeachId);
 
@@ -76,15 +117,35 @@ const HarvestAddPage: React.FC = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const validateForm = (): boolean => {
     if (!selectedBeachId) {
       Taro.showToast({ title: '请选择海滩', icon: 'none' });
-      return;
+      return false;
     }
     if (speciesList.length === 0) {
       Taro.showToast({ title: '请添加至少一种收获物种', icon: 'none' });
-      return;
+      return false;
     }
+    const hasValidSpecies = speciesList.some(s => s.count > 0 && s.weight > 0);
+    if (!hasValidSpecies) {
+      Taro.showToast({ title: '请完善物种的数量和重量', icon: 'none' });
+      return false;
+    }
+    const invalidSpecies = speciesList.filter(s => s.count > 0 && s.weight <= 0);
+    if (invalidSpecies.length > 0) {
+      Taro.showToast({ title: `${invalidSpecies[0].name} 的重量需大于0`, icon: 'none' });
+      return false;
+    }
+    const zeroCountSpecies = speciesList.filter(s => s.count <= 0 && s.weight > 0);
+    if (zeroCountSpecies.length > 0) {
+      Taro.showToast({ title: `${zeroCountSpecies[0].name} 的数量需大于0`, icon: 'none' });
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
     if (submitting) return;
 
     setSubmitting(true);
@@ -92,20 +153,38 @@ const HarvestAddPage: React.FC = () => {
 
     try {
       const now = new Date();
-      const record: HarvestRecord = {
-        id: generateId(),
-        date: formatDate(now),
-        beachId: selectedBeachId,
-        beachName: selectedBeach?.name || '',
-        species: speciesList.filter(s => s.count > 0),
-        weather,
-        duration: parseFloat(duration) || 0,
-        notes,
-        imageIds: [],
-        createdAt: formatDateTime(now)
-      };
+      const validSpecies = speciesList.filter(s => s.count > 0 && s.weight > 0);
 
-      await saveHarvestRecord(record);
+      if (isEdit && recordId) {
+        const record: HarvestRecord = {
+          id: recordId,
+          date: formatDate(now),
+          beachId: selectedBeachId,
+          beachName: selectedBeach?.name || '',
+          species: validSpecies,
+          weather,
+          duration: parseFloat(duration) || 0,
+          notes,
+          imageIds: [],
+          createdAt: originalCreatedAt || formatDateTime(now)
+        };
+        await updateHarvestRecord(record);
+      } else {
+        const record: HarvestRecord = {
+          id: generateId(),
+          date: formatDate(now),
+          beachId: selectedBeachId,
+          beachName: selectedBeach?.name || '',
+          species: validSpecies,
+          weather,
+          duration: parseFloat(duration) || 0,
+          notes,
+          imageIds: [],
+          createdAt: formatDateTime(now)
+        };
+        await saveHarvestRecord(record);
+      }
+
       Taro.hideLoading();
       Taro.showToast({ title: '保存成功', icon: 'success' });
       setTimeout(() => {
@@ -133,6 +212,14 @@ const HarvestAddPage: React.FC = () => {
 
   const totalCount = speciesList.reduce((sum, s) => sum + s.count, 0);
   const totalWeight = speciesList.reduce((sum, s) => sum + s.weight, 0).toFixed(1);
+
+  if (loading) {
+    return (
+      <View className={styles.container} style={{ paddingTop: '200rpx', textAlign: 'center' }}>
+        <Text>加载中...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView scrollY className={styles.container}>
@@ -257,7 +344,7 @@ const HarvestAddPage: React.FC = () => {
       <View className={styles.bottomBar}>
         <View className={styles.cancelBtn} onClick={handleCancel}>取消</View>
         <View className={styles.submitBtn} onClick={handleSubmit}>
-          {submitting ? '保存中...' : '保存记录'}
+          {submitting ? '保存中...' : (isEdit ? '更新记录' : '保存记录')}
         </View>
       </View>
     </ScrollView>

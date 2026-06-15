@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { View, Text, ScrollView } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import { View, Text, ScrollView, Input } from '@tarojs/components';
+import Taro, { useDidShow } from '@tarojs/taro';
 import styles from './index.module.scss';
 import classnames from 'classnames';
 import { safetyRoutes, beaches } from '@/data/beach';
+import { EvacuationPlan, getEvacuationPlanByBeach, saveEvacuationPlan } from '@/utils/storage';
 
 const SafetyPage: React.FC = () => {
   const [selectedBeachId, setSelectedBeachId] = useState('beach1');
@@ -16,6 +17,35 @@ const SafetyPage: React.FC = () => {
     { id: 6, text: '与同伴约定集合时间地点', checked: false }
   ]);
 
+  const [evacPlan, setEvacPlan] = useState<EvacuationPlan | null>(null);
+  const [meetingPointInput, setMeetingPointInput] = useState('');
+  const [peopleCountInput, setPeopleCountInput] = useState('2');
+  const [savingPlan, setSavingPlan] = useState(false);
+
+  const loadPlan = useCallback(async (beachId: string) => {
+    try {
+      const plan = await getEvacuationPlanByBeach(beachId);
+      setEvacPlan(plan);
+      if (plan) {
+        setMeetingPointInput(plan.meetingPoint);
+        setPeopleCountInput(String(plan.peopleCount));
+      } else {
+        setMeetingPointInput('');
+        setPeopleCountInput('2');
+      }
+    } catch (e) {
+      console.error('[SafetyPage] loadPlan error:', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPlan(selectedBeachId);
+  }, [selectedBeachId, loadPlan]);
+
+  useDidShow(() => {
+    loadPlan(selectedBeachId);
+  });
+
   const currentBeach = useMemo(
     () => beaches.find((b) => b.id === selectedBeachId) || beaches[0],
     [selectedBeachId]
@@ -25,6 +55,11 @@ const SafetyPage: React.FC = () => {
     () => safetyRoutes.filter((r) => r.beachId === selectedBeachId),
     [selectedBeachId]
   );
+
+  const selectedRoute = useMemo(() => {
+    if (!evacPlan || !evacPlan.selectedRouteId) return null;
+    return beachRoutes.find(r => r.id === evacPlan.selectedRouteId) || null;
+  }, [evacPlan, beachRoutes]);
 
   const toggleCheck = (id: number) => {
     setCheckList((list) =>
@@ -52,6 +87,49 @@ const SafetyPage: React.FC = () => {
     });
   };
 
+  const handleSelectRoute = (routeId: string) => {
+    setEvacPlan(prev => prev ? { ...prev, selectedRouteId: routeId } : null);
+  };
+
+  const handleSavePlan = async () => {
+    if (savingPlan) return;
+
+    const routeId = evacPlan?.selectedRouteId || '';
+    if (!routeId) {
+      Taro.showToast({ title: '请选择一条撤离路线', icon: 'none' });
+      return;
+    }
+
+    const peopleCount = parseInt(peopleCountInput) || 0;
+    if (peopleCount <= 0) {
+      Taro.showToast({ title: '同行人数需大于0', icon: 'none' });
+      return;
+    }
+
+    setSavingPlan(true);
+    try {
+      const plan: EvacuationPlan = {
+        beachId: selectedBeachId,
+        selectedRouteId: routeId,
+        meetingPoint: meetingPointInput.trim(),
+        peopleCount
+      };
+      await saveEvacuationPlan(plan);
+      setEvacPlan(plan);
+      Taro.showToast({ title: '计划已保存', icon: 'success' });
+    } catch (e) {
+      Taro.showToast({ title: '保存失败', icon: 'none' });
+    } finally {
+      setSavingPlan(false);
+    }
+  };
+
+  const handlePeopleChange = (delta: number) => {
+    const current = parseInt(peopleCountInput) || 0;
+    const next = Math.max(1, Math.min(20, current + delta));
+    setPeopleCountInput(String(next));
+  };
+
   return (
     <ScrollView scrollY className={styles.container}>
       {/* 顶部警示横幅 */}
@@ -68,6 +146,89 @@ const SafetyPage: React.FC = () => {
       <View className={styles.card} onClick={handleBeachSelect}>
         <Text className={styles.cardTitle}>📍 当前海滩：{currentBeach.name}</Text>
         <Text style={{ fontSize: '24rpx', color: '#86909C' }}>点击切换海滩 ›</Text>
+      </View>
+
+      {/* 我的撤离计划 */}
+      <View className={styles.planCard}>
+        <View className={styles.planHeader}>
+          <Text className={styles.planTitle}>📋 我的撤离计划</Text>
+          <Text className={styles.planSaveBtn} onClick={handleSavePlan}>
+            {savingPlan ? '保存中...' : '保存计划'}
+          </Text>
+        </View>
+
+        {/* 常用路线 */}
+        <View className={styles.planSection}>
+          <Text className={styles.planLabel}>常用路线</Text>
+          {beachRoutes.length === 0 ? (
+            <Text className={styles.planEmpty}>该海滩暂无撤离路线</Text>
+          ) : (
+            <View className={styles.routeSelectList}>
+              {beachRoutes.map((route) => (
+                <View
+                  className={classnames(
+                    styles.routeSelectItem,
+                    evacPlan?.selectedRouteId === route.id && styles.routeSelectItemActive
+                  )}
+                  key={route.id}
+                  onClick={() => handleSelectRoute(route.id)}
+                >
+                  <View className={styles.routeSelectCheck}>
+                    {evacPlan?.selectedRouteId === route.id && '✓'}
+                  </View>
+                  <View className={styles.routeSelectInfo}>
+                    <Text className={styles.routeSelectName}>{route.name}</Text>
+                    <Text className={styles.routeSelectMeta}>
+                      约{route.estimatedTime}分钟 · {route.waypoints.length}个航点
+                    </Text>
+                  </View>
+                  <View
+                    className={styles.routeSelectNav}
+                    onClick={(e) => { e.stopPropagation(); handleNav(route.id); }}
+                  >
+                    导航 ›
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+        </View>
+
+        {/* 集合点 */}
+        <View className={styles.planSection}>
+          <Text className={styles.planLabel}>集合地点</Text>
+          <View className={styles.planInputWrap}>
+            <Input
+              className={styles.planInput}
+              placeholder='请输入撤离集合地点'
+              value={meetingPointInput}
+              onInput={(e) => setMeetingPointInput(e.detail.value)}
+              maxlength={30}
+            />
+          </View>
+        </View>
+
+        {/* 同行人数 */}
+        <View className={styles.planSection}>
+          <Text className={styles.planLabel}>同行人数</Text>
+          <View className={styles.peopleSelector}>
+            <View className={styles.peopleBtn} onClick={() => handlePeopleChange(-1)}>－</View>
+            <Text className={styles.peopleNum}>{peopleCountInput}</Text>
+            <View className={styles.peopleBtn} onClick={() => handlePeopleChange(1)}>＋</View>
+            <Text className={styles.peopleUnit}>人</Text>
+          </View>
+        </View>
+
+        {selectedRoute && (
+          <View className={styles.planSummary}>
+            <Text className={styles.planSummaryTitle}>📌 计划概览</Text>
+            <Text className={styles.planSummaryText}>
+              路线：{selectedRoute.name}{'\n'}
+              集合点：{evacPlan?.meetingPoint || '未设置'}{'\n'}
+              同行：{peopleCountInput}人
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* 回头潮/围困预警 */}

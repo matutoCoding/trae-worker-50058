@@ -1,0 +1,183 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding: $spacing-lg;
+  padding-bottom: 140rpx;
+  background: $color-bg-page;
+}
+
+.headerCard {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 8rpx 24rpx rgba(0, 119, 182, 0.25);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.beachName {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+}
+
+.dateText {
+  font-size: $font-size-sm;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.headerMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.metaItem {
+  flex: 1;
+  min-width: 30%;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(255, 255, 255, 0.15);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+}
+
+.metaIcon {
+  font-size: $font-size-lg;
+}
+
+.metaText {
+  font-size: $font-size-sm;
+  color: $color-text-white;
+  font-weight: $font-weight-medium;
+}
+
+.sectionCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.speciesList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.speciesItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.speciesLeft {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.speciesName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+}
+
+.speciesRight {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.speciesCount {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.speciesWeight {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-primary;
+  min-width: 120rpx;
+  text-align: right;
+}
+
+.notesContent {
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  padding: $spacing-md;
+  min-height: 120rpx;
+}
+
+.notesText {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  line-height: 1.7;
+}
+
+.createTime {
+  text-align: center;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  padding: $spacing-md 0;
+}
+
+.bottomBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-md $spacing-lg;
+  padding-bottom: calc(#{$spacing-lg} + env(safe-area-inset-bottom));
+  background: $color-bg-card;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: $spacing-md;
+}
+
+.deleteBtn {
+  flex: 1;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: #F53F3F;
+  background: rgba(245, 63, 63, 0.08);
+  border: 2rpx solid rgba(245, 63, 63, 0.2);
+}
+
+.editBtn {
+  flex: 2;
+  height: $button-height-lg;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-text-white;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 6rpx 20rpx rgba(0, 119, 182, 0.3);
+}
