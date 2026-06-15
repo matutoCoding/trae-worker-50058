@@ -1,0 +1,245 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.profileHeader {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 60%, $color-primary-dark 100%);
+  padding: $spacing-xl $spacing-lg 80rpx;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -100rpx;
+    right: -60rpx;
+    width: 300rpx;
+    height: 300rpx;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+  }
+
+  &::after {
+    content: '🌊';
+    position: absolute;
+    bottom: 20rpx;
+    right: 40rpx;
+    font-size: 180rpx;
+    opacity: 0.1;
+  }
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, $color-ocean-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72rpx;
+  margin-right: $spacing-lg;
+  border: 6rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.userName {
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 6rpx;
+}
+
+.userDesc {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: $font-size-sm;
+}
+
+.editBtn {
+  padding: $spacing-sm $spacing-md;
+  background: rgba(255, 255, 255, 0.2);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-around;
+  margin-top: $spacing-xl;
+  padding: $spacing-md;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: $radius-lg;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(10px);
+}
+
+.statsItem {
+  text-align: center;
+  flex: 1;
+}
+
+.statsNum {
+  color: $color-text-white;
+  font-size: $font-size-xxl;
+  font-weight: $font-weight-bold;
+  margin-bottom: 4rpx;
+  line-height: 1.1;
+}
+
+.statsLabel {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: $font-size-xs;
+}
+
+.menuSection {
+  margin-top: -50rpx;
+  padding: 0 $spacing-lg;
+  position: relative;
+  z-index: 2;
+}
+
+.menuCard {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.menuTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $spacing-md $spacing-sm;
+  border-radius: $radius-md;
+  transition: all $transition-base;
+
+  &:active {
+    background: $color-bg-hover;
+    transform: scale(0.96);
+  }
+}
+
+.menuIcon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, $color-ocean-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.menuItemText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  font-weight: $font-weight-medium;
+  text-align: center;
+}
+
+.iconSafety { background: linear-gradient(135deg, rgba(0, 180, 42, 0.1) 0%, rgba(0, 180, 42, 0.2) 100%); }
+.iconEquip { background: linear-gradient(135deg, rgba(255, 125, 0, 0.1) 0%, rgba(255, 125, 0, 0.2) 100%); }
+.iconHelp { background: linear-gradient(135deg, rgba(245, 63, 63, 0.1) 0%, rgba(245, 63, 63, 0.2) 100%); }
+.iconCalendar { background: linear-gradient(135deg, rgba(0, 119, 182, 0.1) 0%, rgba(0, 119, 182, 0.2) 100%); }
+.iconFav { background: linear-gradient(135deg, rgba(233, 196, 106, 0.15) 0%, rgba(233, 196, 106, 0.25) 100%); }
+.iconFriends { background: linear-gradient(135deg, rgba(144, 224, 239, 0.15) 0%, rgba(144, 224, 239, 0.3) 100%); }
+.iconGuide { background: linear-gradient(135deg, rgba(42, 157, 143, 0.1) 0%, rgba(42, 157, 143, 0.25) 100%); }
+.iconSetting { background: linear-gradient(135deg, rgba(134, 144, 156, 0.1) 0%, rgba(134, 144, 156, 0.2) 100%); }
+
+.listMenu {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg;
+  border-bottom: 2rpx solid $color-divider;
+  transition: all $transition-base;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.listIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, $color-ocean-light 100%);
+}
+
+.listContent {
+  flex: 1;
+}
+
+.listTitle {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  font-weight: $font-weight-medium;
+  margin-bottom: 2rpx;
+}
+
+.listSubtitle {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.listArrow {
+  font-size: $font-size-xl;
+  color: $color-text-tertiary;
+}
+
+.versionInfo {
+  text-align: center;
+  padding: $spacing-lg;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}

@@ -1,0 +1,474 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding: $spacing-lg;
+  padding-bottom: 120rpx;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 480rpx;
+  border-radius: $radius-xl;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, $color-ocean-light 50%, $color-primary-light 100%);
+  margin-bottom: $spacing-md;
+  position: relative;
+  overflow: hidden;
+  box-shadow: $shadow-card;
+}
+
+.mapGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.15) 1rpx, transparent 1rpx),
+    linear-gradient(90deg, rgba(255,255,255,0.15) 1rpx, transparent 1rpx);
+  background-size: 60rpx 60rpx;
+}
+
+.mapDecorations {
+  position: absolute;
+  inset: 0;
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mapTopInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.mapBadge {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: $radius-md;
+  padding: $spacing-sm $spacing-md;
+  box-shadow: $shadow-card;
+}
+
+.badgeLabel {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-bottom: 4rpx;
+}
+
+.badgeValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.mapMarkers {
+  position: relative;
+  flex: 1;
+}
+
+.mapMarker {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -100%);
+}
+
+.markerPin {
+  width: 56rpx;
+  height: 72rpx;
+  background: $color-error;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(245, 63, 63, 0.4);
+
+  &::after {
+    content: '';
+    width: 20rpx;
+    height: 20rpx;
+    background: $color-bg-card;
+    border-radius: 50%;
+    transform: rotate(45deg);
+  }
+}
+
+.markerActive .markerPin {
+  background: $color-primary;
+  box-shadow: 0 4rpx 20rpx rgba(0, 119, 182, 0.5), 0 0 0 12rpx rgba(0, 119, 182, 0.15);
+}
+
+.markerLabel {
+  margin-top: 8rpx;
+  background: $color-bg-card;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+  font-size: 20rpx;
+  color: $color-text-primary;
+  white-space: nowrap;
+  box-shadow: $shadow-card;
+  font-weight: $font-weight-medium;
+}
+
+.markerSpot .markerPin {
+  width: 40rpx;
+  height: 40rpx;
+  background: $color-success;
+  border-radius: 50%;
+  transform: none;
+  box-shadow: 0 4rpx 12rpx rgba(0, 180, 42, 0.4);
+
+  &::after {
+    display: none;
+  }
+}
+
+.markerSpot.markerActive .markerPin {
+  box-shadow: 0 4rpx 16rpx rgba(0, 180, 42, 0.5), 0 0 0 10rpx rgba(0, 180, 42, 0.15);
+}
+
+.mapControls {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+}
+
+.controlBtn {
+  width: 72rpx;
+  height: 72rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  box-shadow: $shadow-card;
+}
+
+.beachSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+}
+
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.sectionCount {
+  font-size: $font-size-sm;
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+  background: rgba(0, 119, 182, 0.08);
+  padding: 6rpx 16rpx;
+  border-radius: $radius-round;
+}
+
+.selectedBeachCard {
+  background: linear-gradient(135deg, rgba(0, 119, 182, 0.06) 0%, rgba(0, 180, 216, 0.06) 100%);
+  border: 2rpx solid rgba(0, 119, 182, 0.2);
+  border-radius: $radius-md;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.beachHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.beachAvatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: $radius-lg;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, $color-ocean-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  margin-right: $spacing-md;
+}
+
+.beachMainInfo {
+  flex: 1;
+}
+
+.beachName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.beachLocation {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  margin-bottom: $spacing-sm;
+}
+
+.facilityRow {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.facilityTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4rpx;
+  padding: 4rpx 12rpx;
+  background: $color-bg-card;
+  border-radius: $radius-xs;
+  font-size: 20rpx;
+  color: $color-text-secondary;
+}
+
+.facilityEnabled {
+  color: $color-success;
+  background: rgba(0, 180, 42, 0.08);
+}
+
+.beachDescription {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.7;
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.speciesSection {
+  margin-bottom: $spacing-md;
+}
+
+.speciesLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-sm;
+}
+
+.speciesList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+}
+
+.speciesTag {
+  padding: 8rpx 20rpx;
+  background: linear-gradient(135deg, $color-ocean-pale 0%, rgba(144, 224, 239, 0.5) 100%);
+  border-radius: $radius-round;
+  font-size: $font-size-sm;
+  color: $color-primary-dark;
+  font-weight: $font-weight-medium;
+}
+
+.actionRow {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.actionBtn {
+  flex: 1;
+  height: $button-height-md;
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+}
+
+.btnSecondary {
+  background: $color-bg-hover;
+  color: $color-primary;
+  border: 2rpx solid rgba(0, 119, 182, 0.2);
+}
+
+.catchSpotsSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.spotsList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.spotItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+}
+
+.spotItemActive {
+  background: rgba(0, 180, 42, 0.06);
+  border-color: rgba(0, 180, 42, 0.3);
+}
+
+.spotIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: $radius-md;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  background: linear-gradient(135deg, rgba(0, 180, 42, 0.1) 0%, rgba(0, 180, 42, 0.2) 100%);
+}
+
+.spotInfo {
+  flex: 1;
+}
+
+.spotName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.spotType {
+  display: inline-block;
+  font-size: 20rpx;
+  padding: 2rpx 10rpx;
+  background: rgba(0, 119, 182, 0.1);
+  color: $color-primary;
+  border-radius: $radius-xs;
+  margin-right: $spacing-sm;
+}
+
+.spotDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 4rpx;
+  @include text-ellipsis;
+}
+
+.spotSpecies {
+  display: flex;
+  gap: 4rpx;
+  margin-top: 6rpx;
+}
+
+.spotSpeciesTag {
+  font-size: 20rpx;
+  color: $color-text-secondary;
+  background: $color-bg-card;
+  padding: 2rpx 8rpx;
+  border-radius: $radius-xs;
+}
+
+.riskSection {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+}
+
+.riskList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.riskItem {
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  border-left: 6rpx solid;
+}
+
+.riskHigh {
+  background: rgba(245, 63, 63, 0.06);
+  border-left-color: $color-error;
+}
+
+.riskMedium {
+  background: rgba(255, 125, 0, 0.06);
+  border-left-color: $color-warning;
+}
+
+.riskHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.riskName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.riskLevel {
+  font-size: 20rpx;
+  font-weight: $font-weight-semibold;
+  padding: 4rpx 12rpx;
+  border-radius: $radius-xs;
+}
+
+.riskLevelHigh {
+  background: rgba(245, 63, 63, 0.12);
+  color: $color-error;
+}
+
+.riskLevelMedium {
+  background: rgba(255, 125, 0, 0.12);
+  color: $color-warning;
+}
+
+.riskDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: 6rpx;
+}
+
+.riskWarning {
+  font-size: $font-size-xs;
+  color: $color-error;
+  font-weight: $font-weight-medium;
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+}

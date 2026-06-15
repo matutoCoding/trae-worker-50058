@@ -1,0 +1,235 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding: $spacing-lg;
+  padding-bottom: 120rpx;
+}
+
+.warningBanner {
+  background: linear-gradient(135deg, $color-error 0%, #FF6B6B 100%);
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  margin-bottom: $spacing-md;
+  box-shadow: 0 8rpx 32rpx rgba(245, 63, 63, 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '⚠️';
+    position: absolute;
+    top: -10rpx;
+    right: 20rpx;
+    font-size: 120rpx;
+    opacity: 0.15;
+  }
+}
+
+.bannerTitle {
+  color: $color-text-white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $spacing-sm;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.bannerDesc {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: $font-size-sm;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+.tideWarningCard {
+  background: linear-gradient(135deg, rgba(255, 125, 0, 0.1) 0%, rgba(255, 125, 0, 0.05) 100%);
+  border: 2rpx solid rgba(255, 125, 0, 0.2);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.warningTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-warning;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.warningList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.warningItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-md;
+  background: $color-bg-card;
+  border-radius: $radius-md;
+  border-left: 4rpx solid $color-warning;
+}
+
+.warningIcon {
+  font-size: 28rpx;
+  margin-right: $spacing-sm;
+  flex-shrink: 0;
+}
+
+.warningText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.routeList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.routeItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:active {
+    border-color: $color-primary;
+    background: rgba(0, 119, 182, 0.04);
+  }
+}
+
+.routeIcon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: $radius-md;
+  background: linear-gradient(135deg, rgba(0, 180, 42, 0.1) 0%, rgba(0, 180, 42, 0.2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.routeInfo {
+  flex: 1;
+}
+
+.routeName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.routeMeta {
+  display: flex;
+  gap: $spacing-md;
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.routeDesc {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  margin-top: 4rpx;
+}
+
+.routeNavBtn {
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, $color-success 0%, #36CFC9 100%);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+}
+
+.tideCheck {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.checkItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+}
+
+.checkBox {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  border: 4rpx solid $color-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: $spacing-md;
+  font-size: 24rpx;
+  transition: all $transition-base;
+}
+
+.checkBoxChecked {
+  background: $color-success;
+  border-color: $color-success;
+  color: $color-text-white;
+}
+
+.checkText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.emergencyBtn {
+  margin-top: $spacing-lg;
+  height: $button-height-lg;
+  background: linear-gradient(135deg, $color-error 0%, #FF6B6B 100%);
+  border-radius: $radius-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  color: $color-text-white;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  box-shadow: 0 8rpx 24rpx rgba(245, 63, 63, 0.3);
+  transition: all $transition-base;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

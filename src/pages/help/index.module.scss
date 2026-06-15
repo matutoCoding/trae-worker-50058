@@ -1,0 +1,367 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  padding: $spacing-lg;
+  padding-bottom: 120rpx;
+}
+
+.sosBanner {
+  background: linear-gradient(135deg, #F53F3F 0%, #FF7875 50%, #F53F3F 100%);
+  border-radius: $radius-xl;
+  padding: $spacing-xxl $spacing-xl;
+  margin-bottom: $spacing-lg;
+  box-shadow: 0 12rpx 48rpx rgba(245, 63, 63, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    border: 4rpx solid rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+  }
+
+  &::before {
+    width: 400rpx;
+    height: 400rpx;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseRing 2s ease-out infinite;
+  }
+
+  &::after {
+    width: 560rpx;
+    height: 560rpx;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulseRing 2s ease-out infinite 0.5s;
+  }
+}
+
+@keyframes pulseRing {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.sosButton {
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #FFFFFF 0%, #FFFFFF 10%, #F53F3F 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 24rpx rgba(255, 255, 255, 0.15),
+    0 16rpx 48rpx rgba(0, 0, 0, 0.3),
+    inset 0 -8rpx 32rpx rgba(0, 0, 0, 0.2);
+  transition: all 0.15s ease;
+  margin-bottom: $spacing-xl;
+  position: relative;
+  z-index: 2;
+  border: 8rpx solid rgba(255, 255, 255, 0.9);
+
+  &:active {
+    transform: scale(0.94);
+    box-shadow:
+      0 0 0 16rpx rgba(255, 255, 255, 0.1),
+      0 8rpx 24rpx rgba(0, 0, 0, 0.2),
+      inset 0 -4rpx 16rpx rgba(0, 0, 0, 0.15);
+  }
+}
+
+.sosIcon {
+  font-size: 80rpx;
+  line-height: 1;
+  margin-bottom: 8rpx;
+}
+
+.sosText {
+  color: #F53F3F;
+  font-size: $font-size-xl;
+  font-weight: 900;
+  letter-spacing: 8rpx;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+.sosSubText {
+  color: $color-text-white;
+  font-size: $font-size-sm;
+  opacity: 0.9;
+  position: relative;
+  z-index: 2;
+  font-weight: $font-weight-semibold;
+}
+
+.sosTip {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: $font-size-xs;
+  margin-top: 6rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.locationCard {
+  background: linear-gradient(135deg, rgba(0, 119, 182, 0.06) 0%, rgba(0, 180, 216, 0.04) 100%);
+  border: 2rpx solid rgba(0, 119, 182, 0.15);
+}
+
+.locationInfo {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.locationIcon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 16rpx rgba(0, 119, 182, 0.25);
+}
+
+.locationText {
+  flex: 1;
+}
+
+.locationTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 6rpx;
+}
+
+.locationCoord {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  font-family: monospace;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.locationAccuracy {
+  display: inline-block;
+  margin-top: 6rpx;
+  padding: 2rpx 12rpx;
+  background: rgba(0, 180, 42, 0.1);
+  color: $color-success;
+  border-radius: $radius-xs;
+  font-size: 20rpx;
+  font-weight: $font-weight-semibold;
+}
+
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: $spacing-sm $spacing-md;
+  background: $color-bg-card;
+  border: 2rpx solid rgba(0, 119, 182, 0.2);
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+}
+
+.phoneList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.phoneItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  border: 2rpx solid transparent;
+  transition: all $transition-base;
+
+  &:active {
+    border-color: $color-primary;
+    background: rgba(0, 119, 182, 0.04);
+  }
+}
+
+.phoneIcon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.icon110 {
+  background: rgba(245, 63, 63, 0.1);
+}
+
+.icon119 {
+  background: rgba(255, 125, 0, 0.1);
+}
+
+.icon120 {
+  background: rgba(0, 180, 42, 0.1);
+}
+
+.icon12395 {
+  background: rgba(0, 119, 182, 0.1);
+}
+
+.iconContact {
+  background: rgba(114, 46, 209, 0.1);
+}
+
+.phoneInfo {
+  flex: 1;
+}
+
+.phoneName {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.phoneDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+}
+
+.phoneNum {
+  font-size: $font-size-md;
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  margin-right: $spacing-sm;
+}
+
+.phoneBtn {
+  padding: $spacing-sm $spacing-md;
+  background: linear-gradient(135deg, $color-success 0%, #36CFC9 100%);
+  color: $color-text-white;
+  border-radius: $radius-button;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.contactSection {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 2rpx dashed $color-border;
+}
+
+.contactHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.contactLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.addContact {
+  font-size: $font-size-xs;
+  color: $color-primary;
+  font-weight: $font-weight-semibold;
+  padding: $spacing-xs $spacing-sm;
+  background: rgba(0, 119, 182, 0.06);
+  border-radius: $radius-xs;
+}
+
+.safetyGuideCard {
+  background: linear-gradient(135deg, rgba(255, 125, 0, 0.06) 0%, rgba(255, 193, 7, 0.04) 100%);
+  border: 2rpx solid rgba(255, 125, 0, 0.15);
+}
+
+.guideList {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.guideItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-sm 0;
+}
+
+.guideNum {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $color-warning 0%, #FFD666 100%);
+  color: $color-text-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: $font-weight-bold;
+  margin-right: $spacing-sm;
+  flex-shrink: 0;
+  margin-top: 2rpx;
+}
+
+.guideText {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  line-height: 1.6;
+}
+
+.guideText strong {
+  color: $color-error;
+  font-weight: $font-weight-semibold;
+}
